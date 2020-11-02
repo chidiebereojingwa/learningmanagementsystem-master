@@ -1,0 +1,84 @@
+{% extends 'externals/base.html' %}
+
+
+          {% block header %}
+                   {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom"> Courses List</h2>
+            </div>
+          {% endblock header %}
+{% block content %}
+        <section class="dashboard-counts no-padding-bottom">
+            <div class="container-fluid">
+  <nav aria-label="breadcrumb">
+  {% if request.user.is_instructor %}
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Available Courses</li>
+    </ol>
+  {% endif %}
+  {% if request.user.is_instructor %}
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">My Courses</li>
+    </ol>
+  {% endif %}
+  </nav>
+
+   {% if request.user.is_student %}
+  <h2 class="mb-3">My Courses</h2>
+  <a href="{% url 'student:registered_course_list' %}" class="btn btn-primary mb-3" role="button">View Registered Courses</a>
+    {% endif %}
+  <div class="card">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+            {% if request.user.is_instructor %}
+          <th>Created</th>
+            {% endif %}
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          <tr>
+
+            <td class="align-middle"><a href="{% url 'admin_view_courses' course.pk %}">{{ course.title }}</a></td>
+            <td class="align-middle">{{ course.description|truncatechars:15}}</td>
+              {% if request.user.is_instructor %}
+            <td class="align-middle">{{ course.created }}</td>
+              {% endif %}
+            <td class="text-right">
+                {% if request.user.is_instructor %}
+              <a href="{% url 'instructor:topic_add' course.pk %}" class="btn btn-primary">Add Topics</a>
+              <a href="{% url 'instructor:quiz_add' course.pk %}" class="btn btn-primary">Create Quiz</a>
+{#              <a href="{% url 'student:register_course' course.pk %}" class="btn btn-primary">Register Students</a>#}
+            {% endif %}
+            </td>
+
+          </tr>
+        {% empty %}
+            {% if request.user.is_instructor %}
+          <tr>
+            <td class="bg-light text-center font-italic" colspan="5">You haven't created any course yet.</td>
+          </tr>
+            {% endif %}
+            {% if request.user.is_student %}
+            <tr>
+                <td class="bg-light text-center font-italic" colspan="5">There are no course available.</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+            </div>
+        </section>
+{% endblock %}

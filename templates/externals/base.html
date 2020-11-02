@@ -1,0 +1,212 @@
+{% load static %}<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Learning Management System{% endblock title %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'externals/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="{% static 'externals/vendor/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="{% static 'externals/css/fontastic.css' %}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{% static 'externals/css/style.default.css' %}" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="{% static 'externals/css/custom.css' %}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{% static 'externals/img/favicon.ico ' %}">
+      {% if user.is_authenticated and user.is_instructor %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/instructor.css' %}">
+    {% else %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/students.css' %}">
+    {% endif %}
+  </head>
+  <body>
+    <div class="page">
+      <!-- Main Navbar-->
+      <header class="header">
+        <nav class="navbar">
+          <!-- Search Box-->
+
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+              <div class="navbar-header">
+                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                  <div class="brand-text d-none d-lg-inline-block"><span>AYULLA </span><strong>LMS</strong></div>
+                  <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
+                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+              </div>
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+
+                <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="{% static 'externals/img/avatar-1.jpg' %}" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="title">
+              <h1 class="h4">{{ user.username }}</h1>
+              {% if user.is_instructor %}
+                <p>Course Instructor</p>
+                {% elif user.is_student %}
+                <p>Student</p>
+                {% elif user.is_staff %}
+                <p>Staff</p>
+                {% endif %}
+            </div>
+          </div>
+          <!-- Sidebar Navidation Menus-->
+
+
+            {% if user.is_staff %}
+
+
+            <!-- Admin Side Panel -->
+              <ul class="list-unstyled">
+                        <li class="active"><a href="{% url 'admin_home' %}"> <i class="icon-home"></i>Home </a></li>
+                        <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Accounts Summary </a>
+                          <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                            <li><a href="{% url 'instructor_accounts' %}">Instructors Account</a></li>
+                            <li><a href="{% url 'student_accounts' %}">Students Account</a></li>
+                            <li><a href="{% url 'observer_accounts' %}">Observers Account</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#exampledropdownDropdown1" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Create Accounts </a>
+                          <ul id="exampledropdownDropdown1" class="collapse list-unstyled ">
+                            <li><a href="{% url 'instructor_signup' %}">Add Instructor</a></li>
+                            <li><a href="{% url 'student_signup' %}">Add Student</a></li>
+                            <li><a href="{% url 'guest_signup' %}">Add Observer</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#exampledropdownDropdown2" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Courses </a>
+                          <ul id="exampledropdownDropdown2" class="collapse list-unstyled ">
+                            <li><a href="{% url 'admin_list_courses' %}">View Courses</a></li>
+                            <li><a href="{% url 'admin_create_courses' %}">Add Course</a></li>
+                            <li><a href="{% url 'admin_assign_courses' %}">Assign Course To Instructors</a></li>
+                          </ul>
+                        </li>
+                 <li><a href="{% url 'discussion_home' %}"> <i class="icon-interface-windows"></i>Discussions </a></li>
+              </ul>
+            {% endif %}
+
+
+
+
+
+                <!-- Instructor Side Panel -->
+        {% if user.is_instructor %}
+            <ul class="list-unstyled">
+                    <li class="active"><a href="{% url 'home' %}"> <i class="icon-home"></i>Home </a></li>
+
+                        <li><a href="#exampledropdownDropdown2" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Courses </a>
+                          <ul id="exampledropdownDropdown2" class="collapse list-unstyled ">
+                            <li><a href="{% url 'instructor:course_change_list' %}">View Courses</a></li>
+
+                          </ul>
+                        </li>
+                    <li><a href="{% url 'instructor:topic_change_list' %}"> <i class="icon-interface-windows"></i>Course Topics </a></li>
+                    <li><a href="{% url 'instructor:quiz_change_list' %}"> <i class="icon-interface-windows"></i>My Quizzes </a></li>
+                    <li><a href="#"> <i class="icon-interface-windows"></i>Course Assignments </a></li>
+
+                    <li><a href="#exampledropdownDropdown5" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Discussions </a>
+                      <ul id="exampledropdownDropdown5" class="collapse list-unstyled ">
+                        <li><a href="{% url 'new_board' %}">Create Board</a></li>
+                        <li><a href="{% url 'discussion_home' %}">View Discussions</a></li>
+
+                      </ul>
+                    </li>
+                </ul>
+        {% endif %}
+            <!-- Student Side Panel -->
+        {% if user.is_student %}
+             <ul class="list-unstyled">
+                    <li class="active"><a href="{% url 'student:course_change_list' %}"> <i class="icon-home"></i>Courses </a></li>
+                    <li><a href="{% url 'student:registered_course_list' %}"> <i class="icon-grid"></i>Registered Course</a></li>
+                    <li><a href="{% url 'student:quiz_list' %}"> <i class="fa fa-bar-chart"></i>Quizzes </a></li>
+                    <li class=""><a href="{% url 'discussion_home' %}"> <i class="icon-home"></i>Discussions </a></li>
+                    <li><a href="#exampledropdownDropdown9" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Assignments </a>
+                      <ul id="exampledropdownDropdown9" class="collapse list-unstyled ">
+                        <li><a href="#">Course Assignments</a></li>
+                        <li><a href="#">Reviews</a></li>
+                      </ul>
+                    </li>
+
+
+             </ul>
+        {% endif %}
+            <!-- Observer Side Panel -->
+        {% if user.is_observer %}
+             <ul class="list-unstyled">
+                    <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
+                    <li><a href="tables.html"> <i class="icon-grid"></i>Tables </a></li>
+                    <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Charts </a></li>
+                    <li><a href="forms.html"> <i class="icon-padnote"></i>Forms </a></li>
+                    <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Example dropdown </a>
+                      <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Example dropdown </a>
+                      <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Example dropdown </a>
+                      <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Page</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li>
+            </ul>
+        {% endif %}
+        </nav>
+        <div class="content-inner">
+        <header class="page-header">
+          {% block header %}
+
+          {% endblock header %}
+          </header>
+
+            {% block content %}
+
+
+
+
+            {% endblock content %}
+
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="{% static 'externals/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'externals/vendor/popper.js/umd/popper.min.js' %}"> </script>
+    <script src="{% static 'externals/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'externals/vendor/jquery.cookie/jquery.cookie.js' %}"> </script>
+    <script src="{% static 'externals/vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'externals/vendor/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'externals/js/charts-home.js' %}"></script>
+    {% block javascript %} {% endblock javascript %}
+    <!-- Main File-->
+    <script src="{% static 'externals/js/front.js' %}"></script>
+  </body>
+</html>

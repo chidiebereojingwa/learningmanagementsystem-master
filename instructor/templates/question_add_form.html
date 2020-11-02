@@ -1,0 +1,33 @@
+{% extends 'externals/base.html' %}
+
+{% load crispy_forms_tags %}
+
+          {% block header %}
+                   {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom"> Admin Dashboard</h2>
+            </div>
+          {% endblock header %}
+
+    {% block content %}
+    <section class="dashboard-counts no-padding-bottom">
+            <div class="container-fluid">
+
+  <h2 class="mb-3">Add a new question</h2>
+  <p class="lead">Add first the text of the question. In the next step you will be able to add the possible answers.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'instructor:quiz_change' quiz.pk %}" class="btn btn-outline-secondary" role="button">Nevermind</a>
+  </form>
+            </div>
+    </section>
+{% endblock %}
